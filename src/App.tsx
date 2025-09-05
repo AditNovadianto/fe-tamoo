@@ -131,30 +131,53 @@ const App = () => {
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   };
 
+  const capitalizeWords = (str: string) =>
+    str.replace(/\b\w/g, (char: string) => char.toUpperCase());
+
+  const handleDownload = async (url: string, filename: string) => {
+    try {
+      const res = await fetch(url);
+      const blob = await res.blob();
+
+      const downloadUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(downloadUrl);
+    } catch (err) {
+      console.error("Download failed:", err);
+    }
+  };
+
   console.log(datas);
 
   return (
     <div className="p-4">
-      <div className="w-[50%] mx-auto flex flex-col gap-5 bg-blue-200 p-5 rounded-lg shadow">
-        <p className="text-2xl font-bold">Form Data</p>
+      <div className="w-[80%] mx-auto flex flex-col gap-5 bg-blue-200 p-5 rounded-lg shadow">
+        <p className="text-2xl font-bold">List Tamu</p>
 
         <div>
           <p>Nama</p>
+
           <input
             value={name}
             className="mt-3 px-3 py-2 w-full border-2 border-black rounded-lg"
             type="text"
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setName(capitalizeWords(e.target.value))}
           />
         </div>
 
         <div>
           <p>Alamat</p>
+
           <input
             value={address}
             className="mt-3 px-3 py-2 w-full border-2 border-black rounded-lg"
             type="text"
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(e) => setAddress(capitalizeWords(e.target.value))}
           />
         </div>
 
@@ -177,8 +200,10 @@ const App = () => {
           {!recording && audioURL && (
             <div className="mt-3">
               <p className="font-semibold">Preview Rekaman:</p>
+
               <audio controls className="w-full mt-2">
                 <source src={audioURL} type="audio/webm" />
+
                 Your browser does not support the audio element.
               </audio>
             </div>
@@ -194,7 +219,7 @@ const App = () => {
       </div>
 
       {datas.length > 0 && (
-        <div className="w-[50%] mx-auto mt-10">
+        <div className="w-[80%] mx-auto mt-10">
           <h2 className="text-2xl font-bold mb-5">Submitted Data</h2>
 
           <ul className="flex flex-col gap-5">
@@ -203,9 +228,11 @@ const App = () => {
                 <p>
                   <strong>Nama:</strong> {data.name}
                 </p>
+
                 <p>
                   <strong>Alamat:</strong> {data.address}
                 </p>
+
                 <audio controls className="mt-3 w-full">
                   <source
                     src={data.audioUrl}
@@ -213,6 +240,14 @@ const App = () => {
                   />
                   Browser kamu tidak mendukung audio element.
                 </audio>
+
+                {/* 🔹 Tombol download hasil rekaman dari backend */}
+                <button
+                  onClick={() => handleDownload(data.audioUrl, `recording_${data.name}.webm`)}
+                  className="bg-blue-600 mt-5 block text-white px-3 py-1 rounded hover:bg-blue-700"
+                >
+                  Download Audio
+                </button>
               </li>
             ))}
           </ul>
