@@ -155,12 +155,12 @@ const App = () => {
   console.log(datas);
 
   return (
-    <div className="p-4">
-      <div className="w-[80%] mx-auto flex flex-col gap-5 bg-blue-200 p-5 rounded-lg shadow">
+    <div className="p-3">
+      <div className="w-full md:w-[90%] mx-auto flex flex-col gap-5 bg-blue-200 p-5 rounded-lg shadow">
         <p className="text-2xl font-bold">List Tamu</p>
 
         <div>
-          <p>Nama</p>
+          <p className="font-semibold">Nama</p>
 
           <input
             value={name}
@@ -171,7 +171,7 @@ const App = () => {
         </div>
 
         <div>
-          <p>Alamat</p>
+          <p className="font-semibold">Alamat</p>
 
           <input
             value={address}
@@ -182,7 +182,7 @@ const App = () => {
         </div>
 
         <div className="flex flex-col gap-3 w-full">
-          <p>Rekaman Audio</p>
+          <p className="font-semibold">Ucapan Doa</p>
 
           <button
             onClick={recording ? stopRecording : startRecording}
@@ -219,7 +219,7 @@ const App = () => {
       </div>
 
       {datas.length > 0 && (
-        <div className="w-[80%] mx-auto mt-10">
+        <div className="w-full md:w-[90%] mx-auto mt-10">
           <h2 className="text-2xl font-bold mb-5">Submitted Data</h2>
 
           <ul className="flex flex-col gap-5">
